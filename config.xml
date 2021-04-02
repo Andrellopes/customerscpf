@@ -2,7 +2,7 @@
 <module>
 	<name>customerscpf</name>
 	<displayName><![CDATA[Módulo CPF]]></displayName>
-	<version><![CDATA[2.0.0]]></version>
+	<version><![CDATA[1.0.0]]></version>
 	<description><![CDATA[Adiciona o campo CPF / CNPJ no cadastro do cliente]]></description>
 	<author><![CDATA[Andre Lopes / Ederson Ferreira]]></author>
 	<tab><![CDATA[front_office_features]]></tab>

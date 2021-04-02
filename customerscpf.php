@@ -45,7 +45,7 @@ class Customerscpf extends Module
     {
         $this->name = 'customerscpf';
         $this->tab = 'front_office_features';
-        $this->version = '2.1.0';
+        $this->version = '1.0.0';
         $this->author = 'Andre Lopes / Ederson Ferreira';
         $this->need_instance = 0;
 
