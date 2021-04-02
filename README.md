@@ -1,6 +1,6 @@
 # Módulo CPF para loja Prestashop 1.7.x
 
-Este módulo adiciona os campos CPF/CNPJ e RG/Inscrição estadual no cadastro de usuários pela tabela Customers
+Este módulo adiciona os campos CPF/CNPJ e RG/Inscrição estadual no cadastro de usuários pela tabela Customers.
 
 ### Características
 - O módulo faz a validação do CPF/CNPJ.
