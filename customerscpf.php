@@ -45,7 +45,7 @@ class Customerscpf extends Module
     {
         $this->name = 'customerscpf';
         $this->tab = 'front_office_features';
-        $this->version = '1.0.0';
+        $this->version = '1.5.0';
         $this->author = 'Andre Lopes / Ederson Ferreira';
         $this->need_instance = 0;
 
@@ -70,6 +70,8 @@ class Customerscpf extends Module
 
         include(dirname(__FILE__).'/sql/install.php');
 
+        $this->alteraTabela();
+
         return parent::install() &&
             $this->registerHook('actionFrontControllerSetMedia') &&
             $this->registerHook('actionAdminControllerSetMedia') &&
@@ -88,6 +90,19 @@ class Customerscpf extends Module
         Configuration::deleteByName('CUSTOMERSCPF_LIVE_MODE');
 
         include(dirname(__FILE__).'/sql/uninstall.php');
+
+        $Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN tipo;";
+        if (!Db::getInstance()->Execute($Query)) {
+            return false;
+        }
+        $Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN cpf_cnpj;";
+        if (!Db::getInstance()->Execute($Query)) {
+            return false;
+        }
+        $Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN rg_ie;";
+        if (!Db::getInstance()->Execute($Query)) {
+            return false;
+        }
 
         return parent::uninstall();
     }
@@ -323,6 +338,8 @@ class Customerscpf extends Module
             "date_upd" => date('Y-m-d H:i:s')
         ];
         Db::getInstance()->insert('modulo_cpf',$arrData);
+
+        $this->updateDocumentoCustomer($id_customer);
     }
 
     private function updateDocumento($id_customer)
@@ -334,6 +351,19 @@ class Customerscpf extends Module
             "date_upd" => date('Y-m-d H:i:s')
         ];
         Db::getInstance()->update('modulo_cpf', $arrData, 'id_customer = '.(int)$id_customer );
+
+        $this->updateDocumentoCustomer($id_customer);
+    }
+
+    private function updateDocumentoCustomer($id_customer)
+    {
+        $arrData = [
+            "cpf_cnpj" => preg_replace("/[^0-9]/", "", Tools::getValue('documento')),
+            "rg_ie" => substr(Tools::getValue('rg_ie'), 0, 45),
+            "tipo" => (int)Tools::getValue('tp_documento'),
+            "date_upd" => date('Y-m-d H:i:s')
+        ];
+        Db::getInstance()->update('customer', $arrData, 'id_customer = '.(int)$id_customer );
     }
 
     public function fillFieldsAdmin(array $formData)
@@ -393,5 +423,33 @@ class Customerscpf extends Module
         }
         $result = $db->getRow($sql);
         return $result;
+    }
+
+    private function alteraTabela() {
+
+        $db = Db::getInstance();
+
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'tipo' AND table_schema = '"._DB_NAME_."'";
+        $dados = $db->getRow($sql);
+        if (!$dados) {
+            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD tipo varchar(2) DEFAULT ' ';";
+            $db-> Execute($sql);
+        }
+
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'cpf_cnpj' AND table_schema = '"._DB_NAME_."'";
+        $dados = $db->getRow($sql);
+        if (!$dados) {
+            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD cpf_cnpj varchar(20) DEFAULT ' ';";
+            $db-> Execute($sql);
+        }
+
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'rg_ie' AND table_schema = '"._DB_NAME_."'";
+        $dados = $db->getRow($sql);
+        if (!$dados) {
+            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD rg_ie varchar(20) DEFAULT ' ';";
+            $db-> Execute($sql);
+        }
+
+        return true;
     }
 }
