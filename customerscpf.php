@@ -446,10 +446,11 @@ class Customerscpf extends Module
         $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'rg_ie' AND table_schema = '"._DB_NAME_."'";
         $dados = $db->getRow($sql);
         if (!$dados) {
-            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD rg_ie varchar(20) DEFAULT ' ';";
+            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD rg_ie varchar(45) DEFAULT ' ';";
             $db-> Execute($sql);
         }
 
         return true;
     }
+    
 }
