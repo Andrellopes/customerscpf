@@ -62,12 +62,8 @@ class Customerscpf extends Module
         $this->confirmUninstall = $this->l('Tem certeza de que deseja desinstalar o módulo CPF?');
 
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+    }
 
-
-    /**
-     * Don't forget to create update methods if needed:
-     * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
-     */
     public function install ()
     {
         Configuration::updateValue('CUSTOMERSCPF_LIVE_MODE', false);
