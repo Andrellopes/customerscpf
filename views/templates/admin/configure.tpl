@@ -24,15 +24,15 @@
 *}
 
 <div class="panel">
-	<h3><i class="icon icon-credit-card"></i> {l s='Módulo CPF' mod='psmodcpf'}</h3>
+	<h3><i class="icon icon-credit-card"></i> {l s='Módulo CPF' mod='customerscpf'}</h3>
 	<p>
-		<strong>{l s='O módulo CPF foi instalado com sucesso' mod='psmodcpf'}</strong>
+		<strong>{l s='O módulo CPF foi instalado com sucesso' mod='customerscpf'}</strong>
 	</p>
 	<p>
-		{l s='Este módulo adiciona os campos CPF/CNPJ e RG/Inscrição estadual no cadastro de usuários.' mod='psmodcpf'}<br />
-		{l s='O módulo faz validação do número CPF/CNPJ e verifica se o mesmo já existe no banco de dados.' mod='psmodcpf'}
+		{l s='Este módulo adiciona os campos CPF/CNPJ e RG/Inscrição estadual no cadastro de usuários.' mod='customerscpf'}<br />
+		{l s='O módulo faz validação do número CPF/CNPJ e verifica se o mesmo já existe no banco de dados.' mod='customerscpf'}
 	</p>
 	<p>
-		{l s='Este módulo não necessita de configurações adicionais.' mod='psmodcpf'}
+		{l s='Este módulo não necessita de configurações adicionais.' mod='customerscpf'}
 	</p>
 </div>
