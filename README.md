@@ -13,4 +13,4 @@ Efetue o download do módulo:
 Acesse a área administrativa e vá em Módulos => Módulos e Serviços.
 Clique no botão "Enviar um módulo". Selecione o arquivo que você baixou no link acima e pronto! Não precisa fazer configurações adicionais.
 
-Foi reescrito do modulo de https://github.com/edersondev/psmodcpf/
+Esse projeto utiliza como base o https://github.com/edersondev/psmodcpf/
