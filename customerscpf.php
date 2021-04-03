@@ -1,39 +1,39 @@
 <?php
 /**
-* 2007-2018 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+ * 2007-2018 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2018 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ */
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-include(dirname(__FILE__).'/classes/ValidateDocumento.php');
+include dirname(__FILE__) . '/classes/ValidateDocumento.php';
 
 use PrestaShop\Module\Customerscpf\ValidateDocumento;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class Customerscpf extends Module
 {
@@ -45,7 +45,7 @@ class Customerscpf extends Module
     {
         $this->name = 'customerscpf';
         $this->tab = 'front_office_features';
-        $this->version = '2.0.0';
+        $this->version = '2.0.1';
         $this->author = 'Andre Lopes / Ederson Ferreira';
         $this->need_instance = 0;
 
@@ -64,45 +64,46 @@ class Customerscpf extends Module
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
     }
 
-    public function install ()
+    public function install()
     {
         Configuration::updateValue('CUSTOMERSCPF_LIVE_MODE', false);
 
-        include(dirname(__FILE__).'/sql/install.php');
+        include dirname(__FILE__) . '/sql/install.php';
 
         $this->alteraTabela();
 
         return parent::install() &&
-            $this->registerHook('actionFrontControllerSetMedia') &&
-            $this->registerHook('actionAdminControllerSetMedia') &&
-            $this->registerHook('validateCustomerFormFields') &&
-            $this->registerHook('actionCustomerAccountAdd') &&
-            $this->registerHook('actionCustomerAccountUpdate') &&
-            $this->registerHook('actionAdminCustomersFormModifier') &&
-            $this->registerHook('actionAdminCustomersControllerSaveBefore') &&
-            $this->registerHook('actionAdminCustomersControllerSaveAfter') &&
-            $this->registerHook('additionalCustomerFormFields') &&
-            $this->registerHook('actionCustomerFormBuilderModifier');
+        $this->registerHook('actionFrontControllerSetMedia') &&
+        $this->registerHook('actionAdminControllerSetMedia') &&
+        $this->registerHook('validateCustomerFormFields') &&
+        $this->registerHook('actionCustomerAccountAdd') &&
+        $this->registerHook('actionCustomerAccountUpdate') &&
+        $this->registerHook('actionAdminCustomersFormModifier') &&
+        $this->registerHook('actionAdminCustomersControllerSaveBefore') &&
+        $this->registerHook('actionAdminCustomersControllerSaveAfter') &&
+        $this->registerHook('additionalCustomerFormFields') &&
+        $this->registerHook('actionCustomerFormBuilderModifier');
     }
 
     public function uninstall()
     {
         Configuration::deleteByName('CUSTOMERSCPF_LIVE_MODE');
 
-        include(dirname(__FILE__).'/sql/uninstall.php');
+        include dirname(__FILE__) . '/sql/uninstall.php';
 
-        $Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN tipo;";
-        if (!Db::getInstance()->Execute($Query)) {
-            return false;
-        }
-        $Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN cpf_cnpj;";
-        if (!Db::getInstance()->Execute($Query)) {
-            return false;
-        }
-        $Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN rg_ie;";
-        if (!Db::getInstance()->Execute($Query)) {
-            return false;
-        }
+        // não limpar dados ao desinstalar
+        //$Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN tipo;";
+        //if (!Db::getInstance()->Execute($Query)) {
+        //    return false;
+        //}
+        //$Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN cpf_cnpj;";
+        //if (!Db::getInstance()->Execute($Query)) {
+        //    return false;
+        //}
+        //$Query =   "ALTER TABLE "._DB_PREFIX_."customer DROP COLUMN rg_ie;";
+        //if (!Db::getInstance()->Execute($Query)) {
+        //    return false;
+        //}
 
         return parent::uninstall();
     }
@@ -114,24 +115,23 @@ class Customerscpf extends Module
     {
         $this->context->smarty->assign('module_dir', $this->_path);
 
-        $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
+        $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
         return $output;
     }
 
     /**
-    * Add the CSS & JavaScript files you want to be loaded in the BO.
-    */
+     * Add the CSS & JavaScript files you want to be loaded in the BO.
+     */
     public function hookActionAdminControllerSetMedia()
     {
-
         if (Tools::getValue('module_name') == $this->name) {
-            $this->context->controller->addCSS($this->_path.'views/css/back.css');
+            $this->context->controller->addCSS($this->_path . 'views/css/back.css');
         }
 
-        if (Tools::getValue('controller') == 'AdminCustomers'){
-            $this->context->controller->addJS($this->_path.'views/js/jquery.mask.min.js');
-            $this->context->controller->addJS($this->_path.'views/js/back.js');
+        if (Tools::getValue('controller') == 'AdminCustomers') {
+            $this->context->controller->addJS($this->_path . 'views/js/jquery.mask.min.js');
+            $this->context->controller->addJS($this->_path . 'views/js/back.js');
         }
     }
 
@@ -140,15 +140,15 @@ class Customerscpf extends Module
      */
     public function hookActionFrontControllerSetMedia()
     {
-        if (Tools::getValue('controller') == 'order' || Tools::getValue('controller') == 'identity' || (Tools::getValue('controller') == 'authentication' && Tools::getValue('create_account') == '1')){
+        if (Tools::getValue('controller') == 'order' || Tools::getValue('controller') == 'identity' || (Tools::getValue('controller') == 'authentication' && Tools::getValue('create_account') == '1')) {
             $this->context->controller->registerJavascript(
                 'module-customerscpf-jquerymask',
-                'modules/'.$this->name.'/views/js/jquery.mask.min.js',
+                'modules/' . $this->name . '/views/js/jquery.mask.min.js',
                 ['priority' => 210]
             );
             $this->context->controller->registerJavascript(
                 'module-customerscpf-front',
-                'modules/'.$this->name.'/views/js/front.js',
+                'modules/' . $this->name . '/views/js/front.js',
                 ['priority' => 211]
             );
         }
@@ -162,7 +162,7 @@ class Customerscpf extends Module
                 if (!$objValidateDoc->validarDocumento($field->getValue())) {
                     $field->addError($this->mensagemError);
                 }
-                $id_customer = ( is_null($this->context->customer->id) ? 0 : (int)$this->context->customer->id );
+                $id_customer = (is_null($this->context->customer->id) ? 0 : (int) $this->context->customer->id);
                 if ($this->checkDuplicate($field->getValue(), $id_customer) !== false) {
                     $field->addError('O documento informado já está cadastrado!');
                 }
@@ -177,7 +177,7 @@ class Customerscpf extends Module
 
     public function hookActionCustomerAccountUpdate($params)
     {
-        $result = $this->searchCustomer((int)$params['customer']->id);
+        $result = $this->searchCustomer((int) $params['customer']->id);
         if ($result === false) {
             $this->insertDocumento($params['customer']->id);
         }
@@ -189,23 +189,23 @@ class Customerscpf extends Module
         $formBuilder = $params['form_builder'];
         if ($params['route'] === 'admin_customers_edit') {
             $formBuilder->add('tp_documento', ChoiceType::class, [
-                'choices' => ['CPF' => '1','CNPJ' => '2'],
+                'choices' => ['CPF' => '1', 'CNPJ' => '2'],
                 'multiple' => false,
                 'expanded' => true,
                 'required' => false,
                 'placeholder' => null,
                 'label' => 'Tipo de documento',
-                'disabled' => true
-            ])
-            ->add('documento',TextType::class, [
-                'label' => 'Número',
                 'disabled' => true,
-                'required' => false
             ])
-            ->add('rg_ie',TextType::class,[
-                'label' => 'RG',
-                'disabled' => true
-            ]);
+                ->add('documento', TextType::class, [
+                    'label' => 'Número',
+                    'disabled' => true,
+                    'required' => false,
+                ])
+                ->add('rg_ie', TextType::class, [
+                    'label' => 'RG',
+                    'disabled' => true,
+                ]);
 
             $formData = $params['data'];
             $formData['tp_documento'] = '1';
@@ -227,16 +227,16 @@ class Customerscpf extends Module
             'class' => 't',
             'values' => [
                 [
-                'id' => 'documento_1',
-                'value' => 1,
-                'label' => 'CPF'
+                    'id' => 'documento_1',
+                    'value' => 1,
+                    'label' => 'CPF',
                 ],
                 [
-                'id' => 'documento_2',
-                'value' => 2,
-                'label' => 'CNPJ'
-                ]
-            ]
+                    'id' => 'documento_2',
+                    'value' => 2,
+                    'label' => 'CNPJ',
+                ],
+            ],
         ];
 
         $extraInputs[] = [
@@ -244,7 +244,7 @@ class Customerscpf extends Module
             'label' => 'Número',
             'name' => 'documento',
             'required' => true,
-            'col' => '2'
+            'col' => '2',
         ];
 
         $extraInputs[] = [
@@ -252,28 +252,28 @@ class Customerscpf extends Module
             'label' => 'RG',
             'name' => 'rg_ie',
             'required' => false,
-            'col' => '2'
+            'col' => '2',
         ];
 
-        $id_customer = (int)$params['object']->id;
+        $id_customer = (int) $params['object']->id;
         $result = $this->searchCustomer($id_customer);
 
         $extraValues = &$params['fields_value'];
-        $extraValues['tp_documento'] = ( isset($result['tp_documento']) ? $result['tp_documento'] : 1 );
-        $extraValues['documento'] = ( isset($result['documento']) ? $result['documento'] : null );
-        $extraValues['rg_ie'] = ( isset($result['rg_ie']) ? $result['rg_ie'] : null );
+        $extraValues['tp_documento'] = (isset($result['tp_documento']) ? $result['tp_documento'] : 1);
+        $extraValues['documento'] = (isset($result['documento']) ? $result['documento'] : null);
+        $extraValues['rg_ie'] = (isset($result['rg_ie']) ? $result['rg_ie'] : null);
     }
 
     public function hookActionAdminCustomersControllerSaveBefore($params)
     {
         $objValidateDoc = new ValidateDocumento();
         $documento = Tools::getValue('documento');
-        $id_customer = (int)Tools::getValue('id_customer');
+        $id_customer = (int) Tools::getValue('id_customer');
         if (!empty($documento)) {
-            if (!$objValidateDoc->validarDocumento($documento)){
+            if (!$objValidateDoc->validarDocumento($documento)) {
                 $params['controller']->errors[] = $this->mensagemError;
             }
-            if ($this->checkDuplicate($documento,$id_customer) !== false){
+            if ($this->checkDuplicate($documento, $id_customer) !== false) {
                 $params['controller']->errors[] = "O documento '{$documento}' já está cadastrado!";
             }
         } else {
@@ -283,7 +283,7 @@ class Customerscpf extends Module
 
     public function hookActionAdminCustomersControllerSaveAfter($params)
     {
-        $id_customer = (int)Tools::getValue('id_customer');
+        $id_customer = (int) Tools::getValue('id_customer');
         $result = $this->searchCustomer($id_customer);
         if ($result === false) {
             $this->insertDocumento($id_customer);
@@ -299,8 +299,8 @@ class Customerscpf extends Module
             ->setName('tp_documento')
             ->setType('radio-buttons')
             ->setLabel('Tipo de documento')
-            ->addAvailableValue(1,'CPF')
-            ->addAvailableValue(2,'CNPJ')
+            ->addAvailableValue(1, 'CPF')
+            ->addAvailableValue(2, 'CNPJ')
             ->setValue(1);
         $format[$tipoDocumento->getName()] = $tipoDocumento;
 
@@ -332,12 +332,12 @@ class Customerscpf extends Module
         $arrData = [
             "documento" => preg_replace("/[^0-9]/", "", Tools::getValue('documento')),
             "rg_ie" => substr(Tools::getValue('rg_ie'), 0, 45),
-            "tp_documento" => (int)Tools::getValue('tp_documento'),
+            "tp_documento" => (int) Tools::getValue('tp_documento'),
             "id_customer" => $id_customer,
             "date_add" => date('Y-m-d H:i:s'),
-            "date_upd" => date('Y-m-d H:i:s')
+            "date_upd" => date('Y-m-d H:i:s'),
         ];
-        Db::getInstance()->insert('modulo_cpf',$arrData);
+        Db::getInstance()->insert('modulo_cpf', $arrData);
 
         $this->updateDocumentoCustomer($id_customer);
     }
@@ -347,10 +347,10 @@ class Customerscpf extends Module
         $arrData = [
             "documento" => preg_replace("/[^0-9]/", "", Tools::getValue('documento')),
             "rg_ie" => substr(Tools::getValue('rg_ie'), 0, 45),
-            "tp_documento" => (int)Tools::getValue('tp_documento'),
-            "date_upd" => date('Y-m-d H:i:s')
+            "tp_documento" => (int) Tools::getValue('tp_documento'),
+            "date_upd" => date('Y-m-d H:i:s'),
         ];
-        Db::getInstance()->update('modulo_cpf', $arrData, 'id_customer = '.(int)$id_customer );
+        Db::getInstance()->update('modulo_cpf', $arrData, 'id_customer = ' . (int) $id_customer);
 
         $this->updateDocumentoCustomer($id_customer);
     }
@@ -360,15 +360,15 @@ class Customerscpf extends Module
         $arrData = [
             "cpf_cnpj" => preg_replace("/[^0-9]/", "", Tools::getValue('documento')),
             "rg_ie" => substr(Tools::getValue('rg_ie'), 0, 45),
-            "tipo" => (int)Tools::getValue('tp_documento'),
-            "date_upd" => date('Y-m-d H:i:s')
+            "tipo" => (int) Tools::getValue('tp_documento'),
+            "date_upd" => date('Y-m-d H:i:s'),
         ];
-        Db::getInstance()->update('customer', $arrData, 'id_customer = '.(int)$id_customer );
+        Db::getInstance()->update('customer', $arrData, 'id_customer = ' . (int) $id_customer);
     }
 
     public function fillFieldsAdmin(array $formData)
     {
-        $result = $this->searchCustomer((int)$this->context->customer->id);
+        $result = $this->searchCustomer((int) $this->context->customer->id);
         if ($result) {
             $formData['tp_documento'] = $result['tp_documento'];
             $formData['documento'] = $result['documento'];
@@ -379,7 +379,7 @@ class Customerscpf extends Module
 
     public function fillFieldsFront($format)
     {
-        $result = $this->searchCustomer((int)$this->context->customer->id);
+        $result = $this->searchCustomer((int) $this->context->customer->id);
         if ($result) {
             $format['tp_documento']->setValue($result['tp_documento']);
             $format['documento']->setValue($result['documento']);
@@ -406,8 +406,8 @@ class Customerscpf extends Module
         if (!$objValidateDoc->validarDocumento($documento)) {
             throw new Exception($this->mensagemError);
         }
-        $id_customer = ( is_null($this->context->customer->id) ? null : $this->context->customer->id );
-        if ($this->checkDuplicate($documento,$id_customer) !== false) {
+        $id_customer = (is_null($this->context->customer->id) ? null : $this->context->customer->id);
+        if ($this->checkDuplicate($documento, $id_customer) !== false) {
             throw new Exception('O documento informado já está cadastrado!');
         }
     }
@@ -425,29 +425,29 @@ class Customerscpf extends Module
         return $result;
     }
 
-    private function alteraTabela() {
-
+    private function alteraTabela()
+    {
         $db = Db::getInstance();
 
-        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'tipo' AND table_schema = '"._DB_NAME_."'";
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '" . _DB_PREFIX_ . "customer' AND column_name = 'tipo' AND table_schema = '" . _DB_NAME_ . "'";
         $dados = $db->getRow($sql);
         if (!$dados) {
-            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD tipo varchar(2) DEFAULT ' ';";
-            $db-> Execute($sql);
+            $sql = "ALTER TABLE " . _DB_PREFIX_ . "customer ADD tipo varchar(2) DEFAULT ' ';";
+            $db->Execute($sql);
         }
 
-        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'cpf_cnpj' AND table_schema = '"._DB_NAME_."'";
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '" . _DB_PREFIX_ . "customer' AND column_name = 'cpf_cnpj' AND table_schema = '" . _DB_NAME_ . "'";
         $dados = $db->getRow($sql);
         if (!$dados) {
-            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD cpf_cnpj varchar(20) DEFAULT ' ';";
-            $db-> Execute($sql);
+            $sql = "ALTER TABLE " . _DB_PREFIX_ . "customer ADD cpf_cnpj varchar(20) DEFAULT ' ';";
+            $db->Execute($sql);
         }
 
-        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"._DB_PREFIX_."customer' AND column_name = 'rg_ie' AND table_schema = '"._DB_NAME_."'";
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '" . _DB_PREFIX_ . "customer' AND column_name = 'rg_ie' AND table_schema = '" . _DB_NAME_ . "'";
         $dados = $db->getRow($sql);
         if (!$dados) {
-            $sql =   "ALTER TABLE "._DB_PREFIX_."customer ADD rg_ie varchar(20) DEFAULT ' ';";
-            $db-> Execute($sql);
+            $sql = "ALTER TABLE " . _DB_PREFIX_ . "customer ADD rg_ie varchar(45) DEFAULT ' ';";
+            $db->Execute($sql);
         }
 
         return true;

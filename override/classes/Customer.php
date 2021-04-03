@@ -1,35 +1,34 @@
 <?php
-use PrestaShop\PrestaShop\Adapter\ServiceLocator;
-use PrestaShop\PrestaShop\Adapter\CoreException;
+
 /***
  * Class CustomerCore
  */
 class Customer extends CustomerCore
 {
     /*
-    * module: ps_customercedula
-    * date: 2020-05-11 15:49:55
-    * version: 1.0.0
-    */
+     * module: ps_customercedula
+     * date: 2020-05-11 15:49:55
+     * version: 1.0.0
+     */
     /*
-    * module: customerscpf
-    * date: 2021-04-02 18:20:25
-    * version: 1.0.0
-    */
+     * module: customerscpf
+     * date: 2021-04-02 18:20:25
+     * version: 1.0.0
+     */
     public $cedula;
     /**
      * @see ObjectModel::$definition
      */
     /*
-    * module: ps_customercedula
-    * date: 2020-05-11 15:49:55
-    * version: 1.0.0
-    */
+     * module: ps_customercedula
+     * date: 2020-05-11 15:49:55
+     * version: 1.0.0
+     */
     /*
-    * module: customerscpf
-    * date: 2021-04-02 18:20:25
-    * version: 1.0.0
-    */
+     * module: customerscpf
+     * date: 2021-04-02 18:20:25
+     * version: 1.0.0
+     */
     public static $definition = array(
         'table' => 'customer',
         'primary' => 'id_customer',
